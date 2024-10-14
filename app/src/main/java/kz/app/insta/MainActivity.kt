@@ -79,6 +79,16 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.homeFragment -> bottomNav.menu.findItem(R.id.homeFragment).isChecked = true
+                R.id.searchFragment -> bottomNav.menu.findItem(R.id.searchFragment).isChecked = true
+                R.id.addPostFragment -> bottomNav.menu.findItem(R.id.addPostFragment).isChecked = true
+                R.id.profileFragment -> bottomNav.menu.findItem(R.id.profileFragment).isChecked = true
+                R.id.notificationsFragment -> bottomNav.menu.findItem(R.id.notificationsFragment).isChecked = true
+            }
+        }
     }
 
     private fun updateBottomNavigationSelection(destinationId: Int?) {

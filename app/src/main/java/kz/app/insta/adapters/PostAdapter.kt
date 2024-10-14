@@ -18,7 +18,8 @@ import kz.app.insta.models.Post
 
 class PostAdapter(
     private val posts: List<Post>,
-    private val context: Context
+    private val context: Context,
+    private val onUserClick: (Boolean) -> Unit
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
     inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -38,13 +39,14 @@ class PostAdapter(
         val post = posts[position]
         val postIndex = position
         holder.image.setImageResource(post.postImage)
-        holder.username.text = post.username
-        val usernameAndCaption = "${post.username} ${post.caption}"
+        holder.username.text = post.user.nickname
+        holder.username.setOnClickListener { onUserClick.invoke(post.user.isMe) }
+        val usernameAndCaption = "${post.user.nickname} ${post.caption}"
         val spannableString = SpannableString(usernameAndCaption)
         spannableString.setSpan(
             StyleSpan(Typeface.BOLD),
             0,
-            post.username.length,
+            post.user.nickname.length,
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         holder.usernameAndCaption.text = spannableString

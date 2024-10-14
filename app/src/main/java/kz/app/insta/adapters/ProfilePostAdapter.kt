@@ -8,10 +8,10 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import kz.app.insta.R
-import kz.app.insta.models.Post
+import kz.app.insta.models.ProfilePost
 
 class ProfilePostAdapter(
-    private val posts: List<Post>,
+    private val posts: List<ProfilePost>,
     private val context: Context
 ) : RecyclerView.Adapter<ProfilePostAdapter.PostViewHolder>() {
 
@@ -26,7 +26,7 @@ class ProfilePostAdapter(
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = posts[position]
-        holder.image.setImageResource(post.postImage)
+        holder.image.setImageResource(post.image)
         holder.image.setOnClickListener {
             Toast.makeText(context, "$position post is clicked", Toast.LENGTH_SHORT).show()
         }
