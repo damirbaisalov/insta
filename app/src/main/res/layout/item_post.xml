@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/black"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <ImageView
+            android:id="@+id/user_avatar"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/user_1"
+            tools:src="@drawable/user_1"/>
+
+        <TextView
+            android:id="@+id/username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Maksat Madenietov"
+            android:textColor="@color/white"
+            android:layout_gravity="center_vertical"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/post_image"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:contentDescription="postImage"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/image1"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp"
+        >
+
+        <ImageView
+            android:id="@+id/heart_button"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_heart"
+            tools:src="@drawable/ic_heart"
+            android:layout_alignParentStart="true"
+            android:layout_marginEnd="22dp"/>
+
+        <ImageView
+            android:id="@+id/comment_button"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_comment"
+            tools:src="@drawable/ic_comment"
+            android:layout_toEndOf="@id/heart_button"
+            android:layout_marginEnd="22dp"/>
+
+        <ImageView
+            android:id="@+id/share_button"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_share"
+            tools:src="@drawable/ic_share"
+            android:layout_toEndOf="@id/comment_button"
+            android:layout_marginEnd="22dp"
+            />
+
+        <ImageView
+            android:id="@+id/save_button"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_save"
+            tools:src="@drawable/ic_save"
+            android:layout_alignParentEnd="true"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="16dp">
+
+        <TextView
+            android:id="@+id/likes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="23 046 likes"
+            android:layout_alignParentStart="true"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:id="@+id/usernameAndCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Maksat Madenietov Lorem ipsum dolor sit amet. Et nisi debitis aut dolores totam aut repellendu"
+            android:textColor="@color/white"
+            android:layout_below="@id/likes"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
