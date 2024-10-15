@@ -2,6 +2,8 @@ package kz.app.insta.models
 
 import kz.app.insta.R
 
+const val MY_USER_ID = "ID_0"
+
 data class User(
     val id: String,
     val nickname: String,
@@ -11,19 +13,4 @@ data class User(
     val bio: String = "",
     val posts: List<ProfilePost> = emptyList(),
     val isMe: Boolean = false
-) {
-    companion object {
-        fun initUser(): User {
-            return User(
-                id = "ID_0",
-                nickname = "Maksat Madeniyetov",
-                avatar = R.drawable.user_1,
-                posts = ProfilePost.getMockProfilePosts(),
-                followers = 400,
-                following = 1000,
-                bio = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-                isMe = true
-            )
-        }
-    }
-}
+)

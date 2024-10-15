@@ -7,10 +7,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kz.app.insta.R
+import kz.app.insta.SharedViewModel
 import kz.app.insta.adapters.ProfilePostAdapter
+import kz.app.insta.models.ProfilePost
 import kz.app.insta.models.User
 
 class ProfileFragment : Fragment() {
@@ -24,25 +27,28 @@ class ProfileFragment : Fragment() {
     private lateinit var userFollowers: TextView
     private lateinit var userFollowing: TextView
 
-    private val user: User by lazy { User.initUser() }
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
-
+        val user = sharedViewModel.users.value?.firstOrNull { it.isMe }
         initViews(view)
-        bindViewsWithData()
+        user?.let { bindViewsWithData(it)}
 
         recyclerView = view.findViewById(R.id.profile_recycler_view_posts)
         val gridLayoutManager = GridLayoutManager(context, 3)
         recyclerView.layoutManager = gridLayoutManager
-
-        postsAdapter = ProfilePostAdapter(emptyList(), requireContext())
+        postsAdapter = ProfilePostAdapter(emptyList())
         recyclerView.adapter = postsAdapter
 
-        loadProfilePosts()
+        loadProfilePosts(user?.posts ?: emptyList())
+
+        sharedViewModel.myPosts.observe(viewLifecycleOwner) { posts ->
+            postsAdapter.updateProfilePosts(posts)
+        }
 
         return view
     }
@@ -56,7 +62,7 @@ class ProfileFragment : Fragment() {
         userFollowing = view.findViewById(R.id.profile_following_count)
     }
 
-    private fun bindViewsWithData() {
+    private fun bindViewsWithData(user: User) {
         userAvatar.setImageResource(user.avatar)
         userNickname.text = user.nickname
         userBio.text = user.bio
@@ -65,8 +71,8 @@ class ProfileFragment : Fragment() {
         userFollowing.text = "${user.following}\nFollowing"
     }
 
-    private fun loadProfilePosts() {
-        postsAdapter = ProfilePostAdapter(user.posts, requireContext())
+    private fun loadProfilePosts(posts: List<ProfilePost>) {
+        postsAdapter = ProfilePostAdapter(posts)
         recyclerView.adapter = postsAdapter
     }
 }

@@ -1,10 +1,10 @@
 package kz.app.insta.adapters
 
-import android.content.Context
 import android.graphics.Typeface
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.StyleSpan
+import android.util.Log
 import android.view.GestureDetector
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -13,13 +13,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import kz.app.insta.R
 import kz.app.insta.models.Post
 
 class PostAdapter(
-    private val posts: List<Post>,
-    private val context: Context,
-    private val onUserClick: (Boolean) -> Unit
+    private var posts: List<Post>,
+    private val onUserClick: (String) -> Unit,
+    private val onLikeClick: () -> Unit
 ) : RecyclerView.Adapter<PostAdapter.PostViewHolder>() {
 
     inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -37,16 +38,20 @@ class PostAdapter(
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
         val post = posts[position]
+        Log.d("TAG", "onBindViewHolder: $posts")
         val postIndex = position
-        holder.image.setImageResource(post.postImage)
-        holder.username.text = post.user.nickname
-        holder.username.setOnClickListener { onUserClick.invoke(post.user.isMe) }
-        val usernameAndCaption = "${post.user.nickname} ${post.caption}"
+        Glide.with(holder.itemView.context)
+            .load(post.postImage)
+            .placeholder(R.drawable.image1)
+            .into(holder.image)
+        holder.username.text = post.nickname
+        holder.username.setOnClickListener { onUserClick.invoke(post.userId) }
+        val usernameAndCaption = "${post.nickname} ${post.caption}"
         val spannableString = SpannableString(usernameAndCaption)
         spannableString.setSpan(
             StyleSpan(Typeface.BOLD),
             0,
-            post.user.nickname.length,
+            post.nickname.length,
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         holder.usernameAndCaption.text = spannableString
@@ -58,15 +63,19 @@ class PostAdapter(
             post.isLiked = !post.isLiked
             post.likes += if (post.isLiked) 1 else -1
             notifyItemChanged(position)
+            if (post.isLiked) onLikeClick.invoke()
         }
-        val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-            override fun onDoubleTap(e: MotionEvent): Boolean {
-                post.isLiked = !post.isLiked
-                post.likes += if (post.isLiked) 1 else -1
-                notifyItemChanged(postIndex)
-                return true
-            }
-        })
+        val gestureDetector = GestureDetector(
+            holder.itemView.context,
+            object : GestureDetector.SimpleOnGestureListener() {
+                override fun onDoubleTap(e: MotionEvent): Boolean {
+                    post.isLiked = !post.isLiked
+                    post.likes += if (post.isLiked) 1 else -1
+                    notifyItemChanged(postIndex)
+                    if (post.isLiked) onLikeClick.invoke()
+                    return true
+                }
+            })
 
         holder.image.setOnTouchListener { _, event ->
             gestureDetector.onTouchEvent(event)
@@ -75,4 +84,9 @@ class PostAdapter(
     }
 
     override fun getItemCount(): Int = posts.size
+
+    fun updatePosts(newPosts: List<Post>) {
+        posts = newPosts
+        notifyDataSetChanged()
+    }
 }

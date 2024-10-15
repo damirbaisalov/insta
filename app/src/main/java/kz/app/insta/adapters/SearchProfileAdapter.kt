@@ -7,14 +7,14 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kz.app.insta.R
-import kz.app.insta.models.SearchUser
+import kz.app.insta.models.User
 
 class SearchProfileAdapter(
-    private var searchUsers: List<SearchUser>,
+    private var users: List<User>,
     private val onUserClick: (String) -> Unit
 ) : RecyclerView.Adapter<SearchProfileAdapter.PostViewHolder>() {
 
-    private var originalSearchUsers: List<SearchUser> = searchUsers
+    private var originalUsers: List<User> = users
 
     inner class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val image: ImageView = itemView.findViewById(R.id.search_profile_avatar)
@@ -27,20 +27,20 @@ class SearchProfileAdapter(
     }
 
     override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        val searchUser = searchUsers[position]
-        holder.image.setImageResource(searchUser.avatar)
-        holder.nickname.text = searchUser.nickname
+        val user = users[position]
+        holder.image.setImageResource(user.avatar)
+        holder.nickname.text = user.nickname
 
-        holder.itemView.setOnClickListener { onUserClick.invoke(searchUser.id) }
+        holder.itemView.setOnClickListener { onUserClick.invoke(user.id) }
     }
 
-    override fun getItemCount(): Int = searchUsers.size
+    override fun getItemCount(): Int = users.size
 
     fun filter(query: String) {
-        searchUsers = if (query.isEmpty()) {
-            originalSearchUsers
+        users = if (query.isEmpty()) {
+            originalUsers
         } else {
-            searchUsers.filter { user ->
+            users.filter { user ->
                 user.nickname.contains(query, ignoreCase = true)
             }
         }
